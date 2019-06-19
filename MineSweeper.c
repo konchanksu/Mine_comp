@@ -7,6 +7,8 @@
 #define BOXSIZE 30
 #define BOXSENTER 15
 
+ //一応完成
+//オリジナルの機能を付けていく
 //構造体宣言
 struct Mine{
    int mapsizex;  //配列内のサイズ
