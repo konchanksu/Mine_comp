@@ -7,31 +7,27 @@
 #define BOXSIZE 30
 #define BOXSENTER 15
 
- //一応完成
-//オリジナルの機能を付けていく
 //構造体宣言
 struct Mine{
    int mapsizex;  //配列内のサイズ
    int mapsizey;  //配列内のサイズ
    int bombnum;   //爆弾の個数
-   int Coordinatex;//マスの左下の角の座標
-   int Coordinatey;
+   int Coordinatex;//マスの左下の角のx座標
+   int Coordinatey;//マスの左下の角のy座標
 };
 struct Mine p;
 
-
 //プロトタイプ宣言
-int opening(void);
-int explain(void);
-int gamelevel(void);
+int Opening(void);
+int Explain(void);
+int Gamelevel(void);
 int RandomBomb(void);
 int Flag(int flag);
 int GameUI(void);
-int CheckBomb(int GAMEMAP[][p.mapsizey], int b);
-int CheckBoxes(int GAMEMAP[][p.mapsizey],int a, int b);
-int ClickX(int x);
-int ClickY(int y);
-int ClickDiscri(int arrayx, int arrayy, int GAMEMAP[][p.mapsizey],int DONTCHANGE[][p.mapsizey],int remain);
+int CheckBomb(int GAMEMAP[][p.mapsizey], int bomb);
+int CheckBoxes(int GAMEMAP[][p.mapsizey],int arrayx, int arrayy);
+int ClickX(int x), ClickY(int y);
+int ClickDiscription(int arrayx, int arrayy, int GAMEMAP[][p.mapsizey],int DONTCHANGE[][p.mapsizey],int remain);
 int GameOver_No1(int GAMEMAP[][p.mapsizey],int remain);
 int GameOver_No2(int remain);
 int MineDfs(int x, int y,int GAMEMAP[][p.mapsizey],int remain);
@@ -39,21 +35,20 @@ int GameClear(void);
 int FlagInstall(int GAMEMAP[][p.mapsizey], int x, int y);
 void dfs(int x, int y,int GAMEMAP[][p.mapsizey]);
 int Remainc(int remain, int GAMEMAP[][p.mapsizey]);
-
-
+int Color(int colornum);
 
 //メイン関数
 int main(){
 
 ///////////変数の宣言////////////////////
   int a;  //説明画面に行くかどうか
-  int b;  //ボム　ほぼ使わん
+  int bomb;  //ボム
   int level;  //難易度
   int flag = 0;  //旗の処理
-  int i, j;
+  int i, j;  //ループカウンタ変数
   int x, y;  //クリックした座標
   int arrayx, arrayy;//クリックの座標を配列に直したもの
-  int remain;
+  int remain;  //クリアまでの残りマス数
   hgevent *event;
 ////////////////////////////////////////
 
@@ -62,9 +57,9 @@ int main(){
   HgOpen(1000,700);
   HgSetEventMask(HG_MOUSE_DOWN);
 
-  a = opening();
-  if(a==1) explain();
-  level = gamelevel();
+  a = Opening();
+  if(a==1) Explain();
+  level = Gamelevel();
 
 //構造体の初期化
   if(level == 1) p.mapsizex = 9,  p.mapsizey = 9,  p.bombnum = 10,  p.Coordinatex = 365,  p.Coordinatey = 215;
@@ -87,8 +82,8 @@ int main(){
   remain = p.mapsizex * p.mapsizey;
   //MAP情報
   for(i=0;i<p.bombnum;i++){
-    b = RANDBOM[i];
-    CheckBomb(GAMEMAP, b);
+    bomb = RANDBOM[i];
+    CheckBomb(GAMEMAP, bomb);
   }
   for(i=0;i<p.mapsizex;i++){
     for(j=0;j<p.mapsizey;j++){
@@ -96,10 +91,8 @@ int main(){
       DONTCHANGE[i][j] = GAMEMAP[i][j];
     }
   }
-
-
-
   GameUI();
+
   //ここから動作/////////////////////////
   for(;;){
     //通常モード
@@ -115,13 +108,14 @@ int main(){
       }
       if(x>p.Coordinatex && x<1000-p.Coordinatex && y>p.Coordinatey && y<700-p.Coordinatey){
         arrayx =ClickX(x);  arrayy =ClickY(y);
-        remain = ClickDiscri(arrayx,arrayy,GAMEMAP,DONTCHANGE,remain);
+        remain = ClickDiscription(arrayx,arrayy,GAMEMAP,DONTCHANGE,remain);
       }
       if(remain>=1000)break;
       if(remain==p.bombnum)break;
     }
     if(remain >= 1000)break;
     if(remain==p.bombnum){GameClear();break;}
+
 
     //旗モード
     while(flag == 1){
@@ -145,11 +139,10 @@ int main(){
   HgClose();
   return 0;
 }
-
 //関数の定義////////////////////////////////////////////
 
 //オープニング画面
-int opening(void){
+int Opening(void){
 //表示画面
   HgSetFillColor(HG_SKYBLUE);
   HgBoxFill(0,0,1000,700,0);
@@ -168,7 +161,6 @@ int opening(void){
 
   HgSetFont(HG_G,40);
   HgText(605,150,"GAME START");
-
 //ページ移動
   hgevent *event;
   int x, y;
@@ -210,7 +202,7 @@ int opening(void){
 }
 
 //ルール説明
-int explain(void){
+int Explain(void){
 //表示画面
   HgSetFillColor(HG_SKYBLUE);
   HgBoxFill(0,0,1000,700,0);
@@ -276,7 +268,7 @@ int explain(void){
 }
 
 //難易度設定
-int gamelevel(void){
+int Gamelevel(void){
 //画面表示
   HgSetFillColor(HG_SKYBLUE);
   HgBoxFill(0,0,1000,700,0);
@@ -371,7 +363,7 @@ int RandomBomb(void){
     rand();
     rand();
     numy = (rand()%p.mapsizey);
-    tmp = (numx) + (numy)*100;
+    tmp = numx + (numy)*100;
   return tmp;
 }
 
@@ -422,72 +414,64 @@ int GameUI(void){
 }
 
 //爆弾を配列に取り込む
-int CheckBomb(int GAMEMAP[][p.mapsizey], int b){
-   int x,y;
+int CheckBomb(int GAMEMAP[][p.mapsizey], int bomb){
+   int arrayx,arrayy;
 
-   y = b/100;
-   x = b-y*100;
-   GAMEMAP[x][y] = 10;
+   arrayy = bomb / 100;
+   arrayx = bomb - arrayy * 100;
+   GAMEMAP[arrayx][arrayy] = 10;
    return 0;
 }
 
 //配列に番号をふる
-int CheckBoxes(int GAMEMAP[][p.mapsizey],int a,int b){
+int CheckBoxes(int GAMEMAP[][p.mapsizey],int arrayx,int arrayy){
   int i,j;
   int TMP[3] = {-1,0,1};
   int tm = 0;
 
-  if(GAMEMAP[a][b] == 10) return 0;
+  if(GAMEMAP[arrayx][arrayy] == 10) return 0;
 
-  GAMEMAP[a][b] = 0;
+  GAMEMAP[arrayx][arrayy] = 0;
   for(i=0;i<3;i++){
     for(j=0;j<3;j++){
       if(i==1 && j==1) continue;
       else{
-        if(a==0 && i==0)continue;
-        if(a==p.mapsizex-1 && i==2)continue;
-        if(b==0 && j==0)continue;
-        if(b==p.mapsizey-1 && j==2)continue;
-        if(GAMEMAP[a+TMP[i]][b+TMP[j]] == 10){
+        if(arrayx==0 && i==0)continue;
+        if(arrayx==p.mapsizex-1 && i==2)continue;
+        if(arrayy==0 && j==0)continue;
+        if(arrayy==p.mapsizey-1 && j==2)continue;
+        if(GAMEMAP[arrayx+TMP[i]][arrayy+TMP[j]] == 10){
            tm++;
         }
       }
     }
   }
-  GAMEMAP[a][b] = tm;
+  GAMEMAP[arrayx][arrayy] = tm;
   return 0;
 }
 
 //クリックした場所の判断
 int ClickX(int x){
-  int wherex;
-  wherex =(x - p.Coordinatex) / BOXSIZE; return wherex;
+  int arrayx;
+  arrayx =(x - p.Coordinatex) / BOXSIZE; return arrayx;
 }
 int ClickY(int y){
-  int wherey;
-  wherey =(y - p.Coordinatey) / BOXSIZE; return wherey;
+  int arrayy;
+  arrayy =(y - p.Coordinatey) / BOXSIZE; return arrayy;
 }
 
-//クリックしたマス目判断  ここからさらに再起を加える（別の関数）
-int ClickDiscri(int arrayx, int arrayy,int GAMEMAP[][p.mapsizey],int DONTCHANGE[][p.mapsizey],int remain){
+//クリックしたマス目判断
+int ClickDiscription(int arrayx, int arrayy,int GAMEMAP[][p.mapsizey],int DONTCHANGE[][p.mapsizey],int remain){
   int tmp;
   int x, y;
   x =  p.Coordinatex + arrayx*BOXSIZE, y = p.Coordinatey + arrayy *BOXSIZE;
   tmp = GAMEMAP[arrayx][arrayy];
   if(tmp == 0) {remain = MineDfs(arrayx,arrayy,GAMEMAP,remain);}
-  if(tmp == 1) HgSetFillColor(HG_RED);
-  if(tmp == 2) HgSetFillColor(HG_ORANGE);
-  if(tmp == 3) HgSetFillColor(HG_YELLOW);
-  if(tmp == 4) HgSetFillColor(HG_GREEN);
-  if(tmp == 5) HgSetFillColor(HG_SKYBLUE);
-  if(tmp == 6) HgSetFillColor(HG_BLUE);
-  if(tmp == 7) HgSetFillColor(HG_DBLUE);
-  if(tmp == 8) HgSetFillColor(HG_PURPLE);
+  Color(tmp);
   if(tmp>0 && tmp<9) HgBoxFill(x,y,BOXSIZE,BOXSIZE,1),remain--;
   if(tmp == 0){HgSetFillColor(HG_WHITE); HgBoxFill(x,y,BOXSIZE,BOXSIZE,1);}
   if(tmp == 10)remain = GameOver_No1(DONTCHANGE,remain);
   GAMEMAP[arrayx][arrayy] = -100;
-  //printf("%d\n",remain);
   return remain;
 }
 
@@ -495,19 +479,14 @@ int ClickDiscri(int arrayx, int arrayy,int GAMEMAP[][p.mapsizey],int DONTCHANGE[
 int GameOver_No1(int DONTCHANGE[][p.mapsizey],int remain){
   int i, j;
   int x, y;
+  int colornum;
 
   for(j=0;j<p.mapsizey;j++){
     for(i=0;i<p.mapsizex;i++){
       x = p.Coordinatex + i*BOXSIZE, y = p.Coordinatey + j*BOXSIZE;
-      if(DONTCHANGE[i][j] == 0) HgSetFillColor(HG_WHITE);
-      if(DONTCHANGE[i][j] == 1) HgSetFillColor(HG_RED);
-      if(DONTCHANGE[i][j] == 2) HgSetFillColor(HG_ORANGE);
-      if(DONTCHANGE[i][j] == 3) HgSetFillColor(HG_YELLOW);
-      if(DONTCHANGE[i][j] == 4) HgSetFillColor(HG_GREEN);
-      if(DONTCHANGE[i][j] == 5) HgSetFillColor(HG_SKYBLUE);
-      if(DONTCHANGE[i][j] == 6) HgSetFillColor(HG_BLUE);
-      if(DONTCHANGE[i][j] == 7) HgSetFillColor(HG_DBLUE);
-      if(DONTCHANGE[i][j] == 8) HgSetFillColor(HG_PURPLE);
+      colornum = DONTCHANGE[i][j];
+      Color(colornum);
+
       if(DONTCHANGE[i][j] ==10) HgSetFillColor(HG_WHITE);
       if(DONTCHANGE[i][j] >= 0) HgBoxFill(x,y,BOXSIZE,BOXSIZE,1);
       if(DONTCHANGE[i][j] >  9) HgSetFillColor(HG_BLACK),HgCircleFill(x+BOXSENTER,y+BOXSENTER,BOXSENTER,1);
@@ -517,6 +496,7 @@ int GameOver_No1(int DONTCHANGE[][p.mapsizey],int remain){
   return remain;
 }
 int GameOver_No2(int remain){
+  HgGetChar();
   HgSetFillColor(HG_WHITE);
   HgBoxFill(30,275,960,150,1);
   HgSetFont(HG_G,100);
@@ -527,9 +507,9 @@ int GameOver_No2(int remain){
   return remain;
 }
 
-
 //GameClear
 int GameClear(void){
+  HgGetChar();
   HgSetFillColor(HG_WHITE);
   HgBoxFill(30,275,960,150,1);
   HgSetFont(HG_G,100);
@@ -553,7 +533,6 @@ int FlagInstall(int GAMEMAP[][p.mapsizey],int arrayx,int arrayy){
     HgSetFillColor(HG_DGRAY);
     HgBoxFill(wherex,wherey,BOXSIZE,BOXSIZE,1);
   }else if(tmp==0){
-    printf("確認\n");
     GAMEMAP[arrayx][arrayy] = -20;
     HgSetFillColor(HG_WHITE);
     HgCircleFill(wherex+BOXSENTER,wherey+BOXSENTER,BOXSENTER,0);
@@ -593,15 +572,8 @@ void dfs(int x,int y,int GAMEMAP[][p.mapsizey]){
          else{
            int xx =  p.Coordinatex + nx*BOXSIZE, yy = p.Coordinatey + ny*BOXSIZE;
            int tmp = GAMEMAP[nx][ny];
+           Color(tmp);
 
-           if(tmp == 1) HgSetFillColor(HG_RED);
-           if(tmp == 2) HgSetFillColor(HG_ORANGE);
-           if(tmp == 3) HgSetFillColor(HG_YELLOW);
-           if(tmp == 4) HgSetFillColor(HG_GREEN);
-           if(tmp == 5) HgSetFillColor(HG_SKYBLUE);
-           if(tmp == 6) HgSetFillColor(HG_BLUE);
-           if(tmp == 7) HgSetFillColor(HG_DBLUE);
-           if(tmp == 8) HgSetFillColor(HG_PURPLE);
            HgBoxFill(xx,yy,BOXSIZE,BOXSIZE,1);
            GAMEMAP[nx][ny] = -100;
          }
@@ -609,7 +581,6 @@ void dfs(int x,int y,int GAMEMAP[][p.mapsizey]){
      }
    }
 }
-
 int Remainc(int remain, int GAMEMAP[][p.mapsizey]){
   int rem = p.mapsizex*p.mapsizey;
   for(int i=0;i<p.mapsizex;i++){
@@ -621,4 +592,18 @@ int Remainc(int remain, int GAMEMAP[][p.mapsizey]){
   }
   remain = rem;
   return remain;
+}
+
+//色を設定する
+int Color(int colornum){
+  if(colornum == 0)HgSetFillColor(HG_WHITE);
+  if(colornum == 1) HgSetFillColor(HG_RED);
+  if(colornum == 2) HgSetFillColor(HG_ORANGE);
+  if(colornum == 3) HgSetFillColor(HG_YELLOW);
+  if(colornum == 4) HgSetFillColor(HG_GREEN);
+  if(colornum == 5) HgSetFillColor(HG_SKYBLUE);
+  if(colornum == 6) HgSetFillColor(HG_BLUE);
+  if(colornum == 7) HgSetFillColor(HG_DBLUE);
+  if(colornum == 8) HgSetFillColor(HG_PURPLE);
+  return 0;
 }
