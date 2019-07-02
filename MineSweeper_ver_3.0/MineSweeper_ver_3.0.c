@@ -57,6 +57,7 @@ int main(){
   //動作
   for(;;){
     while(flag==0){
+      HgSetFont(HG_G,20);
       event = HgEvent();
       x = event->x;
       y = event->y;
