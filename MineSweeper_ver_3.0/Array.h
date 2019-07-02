@@ -127,3 +127,20 @@ int FlagInstall_A(int MAP[][mapsizey_ex],int arrayx,int arrayy,int forecastbom){
   }
   return forecastbom;
 }
+
+int FlagNum_A(int MAP[][mapsizey_ex],int layer1){
+  int i,j;
+  int forecastbom = bombnum_ex;
+  for(i=0;i<mapsizex_ex;i++){
+    for(j=0;j<mapsizey_ex;j++){
+      if(MAP[i][j]<0 && MAP[i][j]>=-20){
+        forecastbom--;
+      }
+    }
+  }
+  HgLClear(layer1);
+  HgWSetFont(layer1,HG_G,25);
+  HgWText(layer1,700,670,"爆弾残り %d",forecastbom);
+
+  return forecastbom;
+}

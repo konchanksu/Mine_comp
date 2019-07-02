@@ -65,7 +65,7 @@ int main(){
       arrayx = ClickX_C(x);
       arrayy = ClickY_C(y);
       remain = ClickDiscription_D(arrayx,arrayy,MAP,DONOTCHANGE,remain);
-      printf("%d\n",remain);
+      forecastbom = FlagNum_A(MAP,layer1);
       if(remain >= 1000)break;
     }
 

@@ -94,9 +94,9 @@ int Explain_D(int x,int y,hgevent *event, int a){
     HgText(600,240,":周りに何もありません（安全です）");
 
 
-    HgSetFillColor(HG_SKYBLUE); HgBoxFill(75,400,20,20,1);
-    HgSetFillColor(HG_BLUE);    HgBoxFill(75,360,20,20,1);
-    HgSetFillColor(HG_DBLUE);   HgBoxFill(75,320,20,20,1);
+    HgSetFillColor(HG_CYAN);    HgBoxFill(75,400,20,20,1);
+    HgSetFillColor(HG_SKYBLUE); HgBoxFill(75,360,20,20,1);
+    HgSetFillColor(HG_BLUE);    HgBoxFill(75,320,20,20,1);
     HgSetFillColor(HG_GREEN);   HgBoxFill(75,280,20,20,1);
     HgSetFillColor(HG_YELLOW);  HgBoxFill(75,240,20,20,1);
     HgSetFillColor(HG_ORANGE);  HgBoxFill(75,200,20,20,1);
@@ -315,11 +315,16 @@ int GameOver_No1_D(int DONOTCHANGE[][mapsizey_ex],int remain){
       Color_D(colornum);
 
       if(DONOTCHANGE[i][j] ==10) HgSetFillColor(HG_WHITE);
-      if(DONOTCHANGE[i][j] >= 0) {
+      if(DONOTCHANGE[i][j] > 0 && DONOTCHANGE[i][j]<9) {
         HgBoxFill(wherex,wherey,boxsize,boxsize,1);
         HgText(wherex+8,wherey+5,"%d",DONOTCHANGE[i][j]);
       }
+      if(DONOTCHANGE[i][j] == 0){
+        HgBoxFill(wherex,wherey,boxsize,boxsize,1);
+      }
       if(DONOTCHANGE[i][j] >  9) {
+        HgSetFillColor(HG_WHITE);
+        HgBoxFill(wherex,wherey,boxsize,boxsize,1);
         HgSetFillColor(HG_BLACK);
         HgCircleFill(wherex+boxcenter,wherey+boxcenter,boxcenter,1);
       }
@@ -363,6 +368,11 @@ int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain){
 
       if(nx < 0 || nx >= mapsizex_ex)continue;
       if(ny < 0 || ny >= mapsizey_ex)continue;
+      
+      if(MAP[nx][ny] <0 && MAP[nx][ny] > -30){
+        if(MAP[nx][ny]==-20)MAP[nx][ny]=0;
+        else MAP[nx][ny]= -MAP[nx][ny];
+      }
 
       if(MAP[nx][ny]==0){
         remain--;
