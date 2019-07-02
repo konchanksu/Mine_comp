@@ -285,8 +285,14 @@ int ClickDiscription_D(int arrayx, int arrayy,int MAP[][mapsizey_ex],int DONOTCH
 
       remain = dfs_D(arrayx,arrayy,MAP,remain);
     }
-    if(tmp>0 && tmp<9) HgBoxFill(wherex,wherey,boxsize,boxsize,1),remain--;
+    if(tmp>0 && tmp<9){
+      HgBoxFill(wherex,wherey,boxsize,boxsize,1);
+      HgText(wherex+8,wherey+5,"%d",MAP[arrayx][arrayy]);
+      remain--;
+    }
+
     if(tmp == 10)remain = GameOver_No1_D(DONOTCHANGE,remain);
+
     MAP[arrayx][arrayy] = -100;
     if(remain == 0){
       GameClear_D();
@@ -299,20 +305,23 @@ int ClickDiscription_D(int arrayx, int arrayy,int MAP[][mapsizey_ex],int DONOTCH
 //GameOver
 int GameOver_No1_D(int DONOTCHANGE[][mapsizey_ex],int remain){
   int i, j;
-  int x, y;
+  int wherex, wherey;
   int colornum;
 
   for(i=0;i<mapsizex_ex;i++){
     for(j=0;j<mapsizey_ex;j++){
-      x = Coordinatex_ex + i*boxsize, y = Coordinatey_ex + j*boxsize;
+      wherex = Coordinatex_ex + i*boxsize, wherey = Coordinatey_ex + j*boxsize;
       colornum = DONOTCHANGE[i][j];
       Color_D(colornum);
 
       if(DONOTCHANGE[i][j] ==10) HgSetFillColor(HG_WHITE);
-      if(DONOTCHANGE[i][j] >= 0) HgBoxFill(x,y,boxsize,boxsize,1);
+      if(DONOTCHANGE[i][j] >= 0) {
+        HgBoxFill(wherex,wherey,boxsize,boxsize,1);
+        HgText(wherex+8,wherey+5,"%d",DONOTCHANGE[i][j]);
+      }
       if(DONOTCHANGE[i][j] >  9) {
         HgSetFillColor(HG_BLACK);
-        HgCircleFill(x+boxcenter,y+boxcenter,boxcenter,1);
+        HgCircleFill(wherex+boxcenter,wherey+boxcenter,boxcenter,1);
       }
     }
   }
@@ -369,6 +378,7 @@ int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain){
 
         Color_D(tmp);
         HgBoxFill(wherex,wherey,boxsize,boxsize,1);
+        HgText(wherex+8,wherey+5,"%d",MAP[nx][ny]);
         MAP[nx][ny] = -100;
 
         remain--;
@@ -380,10 +390,10 @@ int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain){
 
 
 int Color_D(int colornum){
-  if(colornum == 0)HgSetFillColor(HG_WHITE);
-  if(colornum == 1) HgSetFillColor(HG_SKYBLUE);
-  if(colornum == 2) HgSetFillColor(HG_BLUE);
-  if(colornum == 3) HgSetFillColor(HG_DBLUE);
+  if(colornum == 0) HgSetFillColor(HG_WHITE);
+  if(colornum == 1) HgSetFillColor(HG_CYAN);
+  if(colornum == 2) HgSetFillColor(HG_SKYBLUE);
+  if(colornum == 3) HgSetFillColor(HG_BLUE);
   if(colornum == 4) HgSetFillColor(HG_GREEN);
   if(colornum == 5) HgSetFillColor(HG_YELLOW);
   if(colornum == 6) HgSetFillColor(HG_ORANGE);
