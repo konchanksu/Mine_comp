@@ -275,6 +275,7 @@ int ClickDiscription_D(int arrayx, int arrayy,int MAP[][mapsizey_ex],int DONOTCH
   int wherex, wherey;
   wherex =  Coordinatex_ex + arrayx*boxsize, wherey = Coordinatey_ex + arrayy *boxsize;
   tmp = MAP[arrayx][arrayy];
+
   Color_D(tmp);
   if(arrayx != -1 && arrayy != -1){
     if(tmp ==0){
@@ -282,7 +283,6 @@ int ClickDiscription_D(int arrayx, int arrayy,int MAP[][mapsizey_ex],int DONOTCH
       HgSetFillColor(HG_WHITE);
       HgBoxFill(wherex,wherey,boxsize,boxsize,1);
       remain--;
-
       remain = dfs_D(arrayx,arrayy,MAP,remain);
     }
     if(tmp>0 && tmp<9){
@@ -292,6 +292,7 @@ int ClickDiscription_D(int arrayx, int arrayy,int MAP[][mapsizey_ex],int DONOTCH
     }
 
     if(tmp == 10)remain = GameOver_No1_D(DONOTCHANGE,remain);
+    if(tmp < 0) {return remain;}
 
     MAP[arrayx][arrayy] = -100;
     if(remain == 0){
@@ -368,7 +369,7 @@ int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain){
 
       if(nx < 0 || nx >= mapsizex_ex)continue;
       if(ny < 0 || ny >= mapsizey_ex)continue;
-      
+
       if(MAP[nx][ny] <0 && MAP[nx][ny] > -30){
         if(MAP[nx][ny]==-20)MAP[nx][ny]=0;
         else MAP[nx][ny]= -MAP[nx][ny];

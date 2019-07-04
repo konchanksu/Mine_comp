@@ -100,7 +100,7 @@ int CheckBoxes_A(int MAP[][mapsizey_ex],int arrayx, int arrayy){
 int FlagInstall_A(int MAP[][mapsizey_ex],int arrayx,int arrayy,int forecastbom){
   int wherex, wherey;
   int tmp = MAP[arrayx][arrayy];
-  wherex =  Coordinatex_ex + arrayx*boxsize, wherey = Coordinatey_ex + arrayy *boxsize;
+  wherex =  Coordinatex_ex + arrayx*boxsize, wherey = Coordinatey_ex + arrayy * boxsize;
 
   if(arrayx != -1 && arrayy != -1){
     if(tmp<0 && tmp>-19){
