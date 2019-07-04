@@ -8,27 +8,40 @@
 #include "Array.h"
 #include "Click.h"
 
-extern int mapsizex_ex;  //配列内のサイズ
-extern int mapsizey_ex;  //配列内のサイズ
-extern int bombnum_ex;   //爆弾の個数
+extern int mapsizex_ex;   //配列内のサイズ
+extern int mapsizey_ex;   //配列内のサイズ
+extern int bombnum_ex;    //爆弾の個数
 extern int Coordinatex_ex;//マスの左下の角のx座標
 extern int Coordinatey_ex;//マスの左下の角のy座標
-extern int boxsize;
-extern int boxcenter;
+extern int boxsize;       //マス一マス分のサイズ
+extern int boxcenter;     //マス一マスの半分のサイズ
 
 //_D --Discription.h  _A --Array.h  _C --Click.h  _S Stack_Dfs.h
 //_ex --extern
 
+/*
+　　マインスイーパー　配列の振り分け
+　　　旗の付いていないマス
+　　　　爆弾 ... 10
+     　開いていない番号のマス ... それぞれの周りにある爆弾の数
+     　開いた番号のマス　...　-100
+
+     旗のついたマス
+     　爆弾 ... -10
+     　開いていない番号のマス（０を除く） ...　-番号
+     　開いていない0のマス ... -20
+*/
+
 int main(){
   srand(time(NULL));
-  int x, y;  //クリック位置
+  int x, y;           //クリック位置
   int explain_route;  //説明に行くかどうか
-  int level;   //レベル設定
-  int remain;  //クリアまで残り
-  int flag = 0;  //旗のon off
-  int layer1, layer2;  //レイヤー設定
-  int arrayx, arrayy;  //配列での座標
-  int forecastbom;  //残り爆弾表示用
+  int level;          //レベル設定
+  int remain;         //クリアまで残り~
+  int flag = 0;       //旗のon off
+  int layer1, layer2; //レイヤー設定
+  int arrayx, arrayy; //配列での座標
+  int forecastbom;    //残り爆弾の数（プレーヤーが予測した数）
   hgevent *event;
 
   boxsize = 30;
@@ -56,6 +69,7 @@ int main(){
 
   //動作
   for(;;){
+    //通常モードの操作
     while(flag==0){
       HgSetFont(HG_G,20);
       event = HgEvent();
@@ -69,6 +83,7 @@ int main(){
       if(remain >= 1000)break;
     }
 
+    //旗をつけるモードの操作
     while(flag==1){
       event = HgEvent();
       x = event->x;
