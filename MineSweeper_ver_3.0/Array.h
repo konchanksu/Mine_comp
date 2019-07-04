@@ -3,17 +3,19 @@
 #include <stdlib.h>
 
 
-int mapsizex_ex;  //配列内のサイズ
-int mapsizey_ex;  //配列内のサイズ
-int bombnum_ex;   //爆弾の個数
+int mapsizex_ex;   //配列内のサイズ
+int mapsizey_ex;   //配列内のサイズ
+int bombnum_ex;    //爆弾の個数
 int Coordinatex_ex;//マスの左下の角のx座標
 int Coordinatey_ex;//マスの左下の角のy座標
-int boxsize;
-int boxcenter;
+int boxsize;       //マス一マス分のサイズ
+int boxcenter;     //マス一マスの半分のサイズ
 
+//プロトタイプ宣言
 int RandomBombin_A(void);
 int CheckBoxes_A(int MAP[][mapsizey_ex],int arrayx,int arrayy);
 
+//レベルごとの詳細設定
 int LevelDecide_A(level){
   if(level == 1) {mapsizex_ex = 9,mapsizey_ex = 9,bombnum_ex = 10,
                   Coordinatex_ex = 365,Coordinatey_ex = 215;}
@@ -26,20 +28,23 @@ int LevelDecide_A(level){
   return 0;
 }
 
+//爆弾をランダムに振り分ける
 int RandomBomb_A(int MAP[mapsizex_ex][mapsizey_ex]){
   int i,j;
   int RandBom[bombnum_ex];
   int arrayx, arrayy;
-  //爆弾を作成
+  //爆弾を作成(一次元配列で爆弾の配列の番号をランダムに)
   for(i=0;i<bombnum_ex;i++){
     RandBom[i] = RandomBombin_A();
     for(j=0;j<i;j++){
+      //前に振り分けたものと被りがあれば、振り分けなおす
       if(RandBom[i] == RandBom[j]){
         i--;
       }
     }
   }
 
+  //一次元配列で作った情報を二次元配列に分解する
   for(i=0;i<bombnum_ex;i++){
     arrayy = RandBom[i]/100;
     arrayx = RandBom[i] - arrayy*100;
@@ -47,16 +52,16 @@ int RandomBomb_A(int MAP[mapsizex_ex][mapsizey_ex]){
     MAP[arrayx][arrayy] = 10;
   }
 
+
   for(i=0;i<mapsizex_ex;i++){
     for(j=0;j<mapsizey_ex;j++){
       CheckBoxes_A(MAP, i,j);
     }
   }
-
-  //爆弾の周りの番号を振る
   return 0;
 }
 
+//爆弾をランダムに振り分ける関数
 int RandomBombin_A(void){
   int tmp;
   int numx, numy;
@@ -70,6 +75,7 @@ int RandomBombin_A(void){
   return tmp;
 }
 
+//爆弾の入っていないます
 int CheckBoxes_A(int MAP[][mapsizey_ex],int arrayx, int arrayy){
   int i,j;
   int TMP[3] = {-1,0,1};

@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <handy.h>
 
-int mapsizex_ex;  //配列内のサイズ
-int mapsizey_ex;  //配列内のサイズ
-int bombnum_ex;   //爆弾の個数
+int mapsizex_ex;   //配列内のサイズ
+int mapsizey_ex;   //配列内のサイズ
+int bombnum_ex;    //爆弾の個数
 int Coordinatex_ex;//マスの左下の角のx座標
 int Coordinatey_ex;//マスの左下の角のy座標
-int boxsize;
-int boxcenter;
+int boxsize;       //マス一マス分のサイズ
+int boxcenter;     //マス一マスの半分のサイズ
 
 int Color_D(int colornum);
 int GameOver_No2_D(int remain);
