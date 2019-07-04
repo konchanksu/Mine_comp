@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <handy.h>
 
-int mapsizex_ex;  //配列内のサイズ
-int mapsizey_ex;  //配列内のサイズ
-int bombnum_ex;   //爆弾の個数
+int mapsizex_ex;   //配列内のサイズ
+int mapsizey_ex;   //配列内のサイズ
+int bombnum_ex;    //爆弾の個数
 int Coordinatex_ex;//マスの左下の角のx座標
 int Coordinatey_ex;//マスの左下の角のy座標
-int boxsize;
-int boxcenter;
+int boxsize;       //マス一マス分のサイズ
+int boxcenter;     //マス一マスの半分のサイズ
 
 int Color_D(int colornum);
 int GameOver_No2_D(int remain);
@@ -368,7 +368,7 @@ int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain){
 
       if(nx < 0 || nx >= mapsizex_ex)continue;
       if(ny < 0 || ny >= mapsizey_ex)continue;
-      
+
       if(MAP[nx][ny] <0 && MAP[nx][ny] > -30){
         if(MAP[nx][ny]==-20)MAP[nx][ny]=0;
         else MAP[nx][ny]= -MAP[nx][ny];
