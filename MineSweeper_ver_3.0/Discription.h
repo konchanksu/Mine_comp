@@ -14,6 +14,7 @@ int GameOver_No2_D(int remain);
 int GameOver_No1_D(int DONOTCHANGE[][mapsizey_ex],int remain);
 int GameClear_D(void);
 int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain);
+int ForecastbomR_D(int forecastbom, int MAP[][mapsizey_ex]);
 
 //オープニング画面
 int Opening_D(int x, int y, hgevent *event){
@@ -411,4 +412,16 @@ int Color_D(int colornum){
   if(colornum == 7) HgSetFillColor(HG_RED);
   if(colornum == 8) HgSetFillColor(HG_PURPLE);
   return 0;
+}
+
+int ForecastbomR_D(int forecastbom, int MAP[][mapsizey_ex]){
+  int num = 0;
+  for(int i=0;i<mapsizex_ex;i++){
+    for(int j=0;j<mapsizey_ex;j++){
+      if(MAP[i][j]<0 && MAP[i][j]>-30)num++;
+    }
+  }
+
+  forecastbom = bombnum_ex - num;
+  return  forecastbom;
 }

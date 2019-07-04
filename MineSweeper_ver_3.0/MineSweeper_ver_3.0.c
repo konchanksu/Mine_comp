@@ -62,16 +62,30 @@ int main(){
   RandomBomb_A(MAP);
   DontChange(MAP,DONOTCHANGE);
   GameUI_D();
+
   forecastbom = bombnum_ex;
   remain = mapsizex_ex * mapsizey_ex - bombnum_ex;
   Forecastbom_D(forecastbom, layer1);
 
+  HgSleep(0.3);
+  int startopen = StOpen_A(MAP);
+
+  int starty = startopen/100;
+  int startx = startopen - (starty * 100);
+  HgSetFont(HG_G,20);
+
+
+  int wherex = Coordinatex_ex + startx*boxsize, wherey = Coordinatey_ex + starty*boxsize;
+  HgSetFillColor(HG_WHITE);
+  HgBoxFill(wherex,wherey,boxsize,boxsize,1);
+  MAP[startx][starty] = -100;
+  remain--;
+  remain = dfs_D(startx, starty, MAP, remain);
 
   //動作
   for(;;){
     //通常モードの操作
     while(flag==0){
-      HgSetFont(HG_G,20);
       event = HgEvent();
       x = event->x;
       y = event->y;
@@ -79,7 +93,9 @@ int main(){
       arrayx = ClickX_C(x);
       arrayy = ClickY_C(y);
       remain = ClickDiscription_D(arrayx,arrayy,MAP,DONOTCHANGE,remain);
-      printf("%d\n",remain);
+      //printf("%d\n",remain);
+      forecastbom = ForecastbomR_D(forecastbom, MAP);
+      Forecastbom_D(forecastbom, layer1);
       if(remain >= 1000)break;
     }
 

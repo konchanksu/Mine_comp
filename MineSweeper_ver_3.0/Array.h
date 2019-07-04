@@ -150,3 +150,24 @@ int FlagNum_A(int MAP[][mapsizey_ex],int layer1){
 
   return forecastbom;
 }
+
+
+//最初の運ゲーをなくす
+int StOpen_A(int MAP[][mapsizey_ex]){
+  int startopen;
+  int i, j;
+  int BOMBZERO[600];
+  int num = 0;
+  for(i=0;i<mapsizex_ex;i++){
+    for(j=0;j<mapsizey_ex;j++){
+      if(MAP[i][j] == 0){
+        BOMBZERO[num] = j * 100 + i;
+        num++;
+      }
+    }
+  }
+
+  num = rand()%num+1;
+  startopen = BOMBZERO[num];
+  return startopen;
+}
