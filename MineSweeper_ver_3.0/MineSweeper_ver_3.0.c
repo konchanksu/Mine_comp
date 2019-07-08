@@ -69,18 +69,19 @@ int main(){
 
   HgSleep(0.3);
   int startopen = StOpen_A(MAP);
+  if(startopen != -1){
+    int starty = startopen/100;
+    int startx = startopen - (starty * 100);
+    HgSetFont(HG_G,20);
+    int wherex = Coordinatex_ex + startx*boxsize, wherey = Coordinatey_ex + starty*boxsize;
+    HgSetFillColor(HG_WHITE);
+    HgBoxFill(wherex,wherey,boxsize,boxsize,1);
+    MAP[startx][starty] = -100;
+    remain--;
+    remain = dfs_D(startx, starty, MAP, remain);
+  }
 
-  int starty = startopen/100;
-  int startx = startopen - (starty * 100);
   HgSetFont(HG_G,20);
-
-
-  int wherex = Coordinatex_ex + startx*boxsize, wherey = Coordinatey_ex + starty*boxsize;
-  HgSetFillColor(HG_WHITE);
-  HgBoxFill(wherex,wherey,boxsize,boxsize,1);
-  MAP[startx][starty] = -100;
-  remain--;
-  remain = dfs_D(startx, starty, MAP, remain);
 
   //動作
   for(;;){

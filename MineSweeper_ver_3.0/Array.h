@@ -166,6 +166,9 @@ int StOpen_A(int MAP[][mapsizey_ex]){
       }
     }
   }
+  if(num == 0){
+    return -1;
+  }
 
   num = rand()%num+1;
   startopen = BOMBZERO[num];
