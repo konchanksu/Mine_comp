@@ -8,15 +8,16 @@
 #include "Array.h"
 #include "Click.h"
 
+#define BOXSIZE 30   //マス一マス分のサイズ
+#define BOXCENTER 15    //マス一マスの半分のサイズ
+
 extern int mapsizex_ex;   //配列内のサイズ
 extern int mapsizey_ex;   //配列内のサイズ
 extern int bombnum_ex;    //爆弾の個数
 extern int Coordinatex_ex;//マスの左下の角のx座標
 extern int Coordinatey_ex;//マスの左下の角のy座標
-extern int boxsize;       //マス一マス分のサイズ
-extern int boxcenter;     //マス一マスの半分のサイズ
 
-//_D --Discription.h  _A --Array.h  _C --Click.h  _S Stack_Dfs.h
+//_D --Discription.h  _A --Array.h  _C --Click.h 
 //_ex --extern
 
 /*
@@ -44,9 +45,6 @@ int main(){
     int arrayx, arrayy; //配列での座標
     int forecastbom; //残り爆弾の数（プレーヤーが予測した数）
     hgevent *event;
-
-    boxsize = 30;
-    boxcenter = 15;
 
     HgOpen(1000, 700);
 
@@ -80,11 +78,11 @@ int main(){
     if(startopen != -1) {
         int starty = startopen/100;
         int startx = startopen - (starty * 100);
-        int wherex = Coordinatex_ex + startx * boxsize;
-        int wherey = Coordinatey_ex + starty * boxsize;
+        int wherex = Coordinatex_ex + startx * BOXSIZE;
+        int wherey = Coordinatey_ex + starty * BOXSIZE;
 
         HgSetFillColor(HG_WHITE);
-        HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+        HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
 
         MAP[startx][starty] = -100;
         remain--;

@@ -2,13 +2,14 @@
 #include <time.h>
 #include <stdlib.h>
 
+#define BOXSIZE 30   //マス一マス分のサイズ
+#define BOXCENTER 15    //マス一マスの半分のサイズ
+
 int mapsizex_ex;   //配列内のサイズ
 int mapsizey_ex;   //配列内のサイズ
 int bombnum_ex;    //爆弾の個数
 int Coordinatex_ex;//マスの左下の角のx座標
 int Coordinatey_ex;//マスの左下の角のy座標
-int boxsize;       //マス一マス分のサイズ
-int boxcenter;     //マス一マスの半分のサイズ
 
 //プロトタイプ宣言
 int RandomBombin_A(void);
@@ -121,31 +122,31 @@ int CheckBoxes_A(int MAP[][mapsizey_ex], int arrayx, int arrayy){
 int FlagInstall_A(int MAP[][mapsizey_ex], int arrayx, int arrayy, int forecastbom){
     int wherex, wherey;
     int tmp = MAP[arrayx][arrayy];
-    wherex =  Coordinatex_ex + arrayx * boxsize, wherey = Coordinatey_ex + arrayy * boxsize;
+    wherex =  Coordinatex_ex + arrayx * BOXSIZE, wherey = Coordinatey_ex + arrayy * BOXSIZE;
 
     if(arrayx != -1 && arrayy != -1) {
         if(tmp < 0 && tmp > -19) {
             MAP[arrayx][arrayy] = -tmp;
             HgSetFillColor(HG_DGRAY);
-            HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+            HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
             forecastbom++;
         }
         else if(tmp == -20) {
             MAP[arrayx][arrayy] = 0;
             HgSetFillColor(HG_DGRAY);
-            HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+            HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
             forecastbom++;
         }
         else if(tmp == 0) {
             MAP[arrayx][arrayy] = -20;
             HgSetFillColor(HG_WHITE);
-            HgCircleFill(wherex + boxcenter, wherey + boxcenter, boxcenter, 0);
+            HgCircleFill(wherex + BOXCENTER, wherey + BOXCENTER, BOXCENTER, 0);
             forecastbom--;
         }
         else if(tmp > 0) {
             MAP[arrayx][arrayy] = -tmp;
             HgSetFillColor(HG_WHITE);
-            HgCircleFill(wherex + boxcenter, wherey + boxcenter, boxcenter, 0);
+            HgCircleFill(wherex + BOXCENTER, wherey + BOXCENTER, BOXCENTER, 0);
             forecastbom--;
         }
     }
@@ -155,7 +156,7 @@ int FlagInstall_A(int MAP[][mapsizey_ex], int arrayx, int arrayy, int forecastbo
 int FlagNum_A(int MAP[][mapsizey_ex], int layer1){
     int i, j;
     int forecastbom = bombnum_ex;
-    
+
     for(i = 0; i < mapsizex_ex; i++) {
         for(j = 0; j < mapsizey_ex; j++) {
             if(MAP[i][j] < 0 && MAP[i][j] >= -20) {

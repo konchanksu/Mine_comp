@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <handy.h>
 
+#define BOXSIZE 30   //マス一マス分のサイズ
+#define BOXCENTER 15    //マス一マスの半分のサイズ
+
 int mapsizex_ex;   //配列内のサイズ
 int mapsizey_ex;   //配列内のサイズ
 int bombnum_ex;    //爆弾の個数
 int Coordinatex_ex;//マスの左下の角のx座標
 int Coordinatey_ex;//マスの左下の角のy座標
-int boxsize;       //マス一マス分のサイズ
-int boxcenter;     //マス一マスの半分のサイズ
 
 int Color_D(int colornum);
 int GameOver_No2_D(int remain);
@@ -222,7 +223,7 @@ int GameUI_D(void){
     HgBoxFill(0,0,1000,700,0);
 
     HgSetFillColor(HG_GRAY);
-    HgBoxFill(Coordinatex_ex-20, Coordinatey_ex-20, mapsizex_ex*boxsize+40, mapsizey_ex*boxsize+40,1);
+    HgBoxFill(Coordinatex_ex-20, Coordinatey_ex-20, mapsizex_ex*BOXSIZE+40, mapsizey_ex*BOXSIZE+40,1);
 
     //フラッグ用のボタン
     HgSetFillColor(HG_ORANGE);
@@ -275,7 +276,7 @@ int Forecastbom_D(int forecastbom, int layer1){
 int ClickDiscription_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int DONOTCHANGE[][mapsizey_ex], int remain){
     int tmp;
     int wherex, wherey;
-    wherex =  Coordinatex_ex + arrayx*boxsize, wherey = Coordinatey_ex + arrayy *boxsize;
+    wherex =  Coordinatex_ex + arrayx*BOXSIZE, wherey = Coordinatey_ex + arrayy *BOXSIZE;
     tmp = MAP[arrayx][arrayy];
 
     Color_D(tmp);
@@ -283,12 +284,12 @@ int ClickDiscription_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int DONOT
         if(tmp == 0) {
             MAP[arrayx][arrayy] = -100;
             HgSetFillColor(HG_WHITE);
-            HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+            HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
             remain--;
             remain = dfs_D(arrayx, arrayy, MAP, remain);
         }
         if(tmp > 0 && tmp <9) {
-            HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+            HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
             HgText(wherex + 8, wherey + 5, "%d", MAP[arrayx][arrayy]);
             remain--;
         }
@@ -313,23 +314,23 @@ int GameOver_No1_D(int DONOTCHANGE[][mapsizey_ex], int remain){
 
     for(i = 0; i < mapsizex_ex; i++) {
         for(j = 0; j < mapsizey_ex; j++) {
-            wherex = Coordinatex_ex + i * boxsize, wherey = Coordinatey_ex + j * boxsize;
+            wherex = Coordinatex_ex + i * BOXSIZE, wherey = Coordinatey_ex + j * BOXSIZE;
             colornum = DONOTCHANGE[i][j];
             Color_D(colornum);
 
             if(DONOTCHANGE[i][j] == 10) HgSetFillColor(HG_WHITE);
             if(DONOTCHANGE[i][j] > 0 && DONOTCHANGE[i][j] < 9) {
-                HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+                HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
                 HgText(wherex + 8,wherey + 5, "%d", DONOTCHANGE[i][j]);
             }
             if(DONOTCHANGE[i][j] == 0) {
-                HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+                HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
             }
             if(DONOTCHANGE[i][j] > 9) {
                 HgSetFillColor(HG_WHITE);
-                HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+                HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
                 HgSetFillColor(HG_BLACK);
-                HgCircleFill(wherex + boxcenter, wherey + boxcenter, boxcenter, 1);
+                HgCircleFill(wherex + BOXCENTER, wherey + BOXCENTER, BOXCENTER, 1);
             }
         }
     }
@@ -368,7 +369,7 @@ int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain){
         for(j = 0; j < 3; j++) {
             if(TMP[i] == 0 && TMP[j] == 0) continue;
             nx = arrayx + TMP[i], ny = arrayy + TMP[j];
-            wherex = Coordinatex_ex + nx * boxsize, wherey = Coordinatey_ex + ny * boxsize;
+            wherex = Coordinatex_ex + nx * BOXSIZE, wherey = Coordinatey_ex + ny * BOXSIZE;
 
             if(nx < 0 || nx >= mapsizex_ex) continue;
             if(ny < 0 || ny >= mapsizey_ex) continue;
@@ -381,7 +382,7 @@ int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain){
             else if(MAP[nx][ny] == 0) {
                 remain--;
                 HgSetFillColor(HG_WHITE);
-                HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+                HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
 
                 MAP[nx][ny] = -100;
                 remain = dfs_D(nx, ny, MAP, remain);
@@ -391,7 +392,7 @@ int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain){
                 int tmp = MAP[nx][ny];
 
                 Color_D(tmp);
-                HgBoxFill(wherex, wherey, boxsize, boxsize, 1);
+                HgBoxFill(wherex, wherey, BOXSIZE, BOXSIZE, 1);
                 HgText(wherex + 8, wherey + 5, "%d", MAP[nx][ny]);
                 MAP[nx][ny] = -100;
 
