@@ -11,21 +11,21 @@ int boxcenter;     //マス一マスの半分のサイズ
 
 //クリックした場所の判断
 int ClickX_C(int x){
-        int tmpX = 1000 - Coordinatex_ex;
-        if(x>Coordinatex_ex && x<tmpX) {
-                int arrayx;
-                arrayx =(x - Coordinatex_ex) / boxsize;
-                return arrayx;
-        }
-        return -1;
+    int tmpX = 1000 - Coordinatex_ex;
+    int arrayx;
+    if(x>Coordinatex_ex && x<tmpX) {
+        arrayx =(x - Coordinatex_ex) / boxsize;
+        return arrayx;
+    }
+    return -1;
 }
 
 int ClickY_C(int y){
-        int tmpY = 700 - Coordinatey_ex;
-        if(y>Coordinatey_ex && y<tmpY) {
-                int arrayy;
-                arrayy =(y - Coordinatey_ex) / boxsize;
-                return arrayy;
-        }
-        return -1;
+    int tmpY = 700 - Coordinatey_ex;
+    int arrayy;
+    if(y>Coordinatey_ex && y<tmpY) {
+            arrayy =(y - Coordinatey_ex) / boxsize;
+            return arrayy;
+    }
+    return -1;
 }
