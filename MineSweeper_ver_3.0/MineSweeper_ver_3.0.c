@@ -17,7 +17,7 @@ extern int bombnum_ex;    //爆弾の個数
 extern int Coordinatex_ex;//マスの左下の角のx座標
 extern int Coordinatey_ex;//マスの左下の角のy座標
 
-//_D --Discription.h  _A --Array.h  _C --Click.h 
+//_D --Discription.h  _A --Array.h  _C --Click.h
 //_ex --extern
 
 /*
@@ -63,7 +63,7 @@ int main(){
 
     RandomBomb_A(MAP);
     DontChange(MAP,DONOTCHANGE);
-    GameUI_D();
+    GameOutside_D();
 
     forecastbom = bombnum_ex;
     remain = mapsizex_ex * mapsizey_ex - bombnum_ex;

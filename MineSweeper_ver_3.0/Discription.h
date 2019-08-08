@@ -216,7 +216,7 @@ int DontChange(int MAP[][mapsizey_ex], int DONOTCHANGE[mapsizex_ex][mapsizey_ex]
 }
 
 //Game外側
-int GameUI_D(void){
+int GameOutside_D(void){
     int i,j;
 
     HgSetFillColor(HG_WHITE);
