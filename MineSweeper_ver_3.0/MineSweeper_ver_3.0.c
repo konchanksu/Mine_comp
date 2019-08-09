@@ -122,6 +122,7 @@ int main(){
 
         if(remain >= 1000) break;
     }
+
     HgGetChar();
     HgClose();
 
