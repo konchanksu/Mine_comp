@@ -169,10 +169,10 @@ int Explain_D(int x, int y, hgevent *event, int a){
             break;
         }
 
-        if(x>100 && x<475 && y>80 && y<260) {
+        if(x > 100 && x < 475 && y > 80 && y < 260) {
             HgSetFillColor(HG_RED);
-            HgBoxFill(100,80,375,180,1);
-            HgText(240,190,"HARD");
+            HgBoxFill(100, 80, 375, 180, 1);
+            HgText(240, 190, "HARD");
 
             level = 3;
             HgSleep(0.3);
@@ -180,10 +180,10 @@ int Explain_D(int x, int y, hgevent *event, int a){
             break;
         }
 
-        if(x>525 && x<900 && y>320 && y<500) {
+        if(x > 525 && x < 900 && y > 320 && y < 500) {
             HgSetFillColor(HG_RED);
-            HgBoxFill(525,320,375,180,1);
-            HgText(620,430,"NORMAL");
+            HgBoxFill(525, 320, 375, 180, 1);
+            HgText(620, 430, "NORMAL");
 
             level = 2;
             HgSleep(0.3);
@@ -191,10 +191,10 @@ int Explain_D(int x, int y, hgevent *event, int a){
             break;
         }
 
-        if(x>525 && x<900 && y>80 && y<260) {
+        if(x > 525 && x < 900 && y > 80 && y < 260) {
             HgSetFillColor(HG_RED);
-            HgBoxFill(525,80,375,180,1);
-            HgText(590,190,"VERY HARD");
+            HgBoxFill(525, 80, 375, 180, 1);
+            HgText(590, 190, "VERY HARD");
 
             level = 4;
             HgSleep(0.3);
@@ -207,8 +207,8 @@ int Explain_D(int x, int y, hgevent *event, int a){
 
 int DontChange(int MAP[][mapsizey_ex], int DONOTCHANGE[mapsizex_ex][mapsizey_ex]){
     int i, j;
-    for(i=0; i<mapsizex_ex; i++) {
-        for(j=0; j<mapsizey_ex; j++) {
+    for(i = 0; i < mapsizex_ex; i++) {
+        for(j = 0; j < mapsizey_ex; j++) {
             DONOTCHANGE[i][j] = MAP[i][j];
         }
     }
@@ -220,20 +220,20 @@ int GameOutside_D(void){
     int i,j;
 
     HgSetFillColor(HG_WHITE);
-    HgBoxFill(0,0,1000,700,0);
+    HgBoxFill(0, 0, 1000, 700, 0);
 
     HgSetFillColor(HG_GRAY);
-    HgBoxFill(Coordinatex_ex-20, Coordinatey_ex-20, mapsizex_ex*BOXSIZE+40, mapsizey_ex*BOXSIZE+40,1);
+    HgBoxFill(Coordinatex_ex - 20 , Coordinatey_ex - 20, mapsizex_ex * BOXSIZE + 40, mapsizey_ex * BOXSIZE + 40, 1);
 
     //フラッグ用のボタン
     HgSetFillColor(HG_ORANGE);
-    HgBoxFill(10,10,20,60,1);
+    HgBoxFill(10, 10, 20, 60, 1);
 
     // グレーの蓋を作る　
-    for(i=0; i<mapsizex_ex; i++) {
-        for(j=0; j<mapsizey_ex; j++) {
+    for(i = 0; i < mapsizex_ex; i++) {
+        for(j = 0; j < mapsizey_ex; j++) {
             HgSetFillColor(HG_DGRAY);
-            HgBoxFill(Coordinatex_ex+i*30,Coordinatey_ex+j*30,30,30,1);
+            HgBoxFill(Coordinatex_ex + i * 30, Coordinatey_ex + j * 30, 30, 30, 1);
         }
     }
     return 0;
@@ -241,13 +241,13 @@ int GameOutside_D(void){
 
 //旗の処理
 int Flag_D(int flag, int layer2, int x, int y){
-    if(x>10 && x<30) {
-        if(y>10 && y<70) {
-            if(flag==0) {
+    if(x > 10 && x < 30) {
+        if(y > 10 && y < 70) {
+            if(flag == 0) {
                 HgLClear(layer2);
 
-                HgWSetFillColor(layer2,HG_BLUE);
-                HgWBoxFill(layer2,10,10,20,60,1);
+                HgWSetFillColor(layer2, HG_BLUE);
+                HgWBoxFill(layer2, 10, 10, 20, 60, 1);
 
                 HgWSetFont(layer2, HG_G, 30);
                 HgWText(layer2, 10, 500,"F");
@@ -256,8 +256,8 @@ int Flag_D(int flag, int layer2, int x, int y){
             }else if(flag==1) {
                 HgLClear(layer2);
 
-                HgWSetFillColor(layer2,HG_ORANGE);
-                HgWBoxFill(layer2,10,10,20,60,1);
+                HgWSetFillColor(layer2, HG_ORANGE);
+                HgWBoxFill(layer2, 10, 10, 20, 60, 1);
                 flag = 0;
             }
         }
@@ -339,24 +339,24 @@ int GameOver_No1_D(int DONOTCHANGE[][mapsizey_ex], int remain){
 }
 
 int GameOver_No2_D(int remain){
-        HgSetFillColor(HG_WHITE);
-        HgBoxFill(30, 275, 960, 150, 1);
-        HgSetFont(HG_G, 100);
-        HgText(120, 300, " GAME  OVER!");
+    HgSetFillColor(HG_WHITE);
+    HgBoxFill(30, 275, 960, 150, 1);
+    HgSetFont(HG_G, 100);
+    HgText(120, 300, " GAME  OVER!");
 
-        remain = 1001;
+    remain = 1001;
 
-        return remain;
+    return remain;
 }
 
 //GameClear
 int GameClear_D(void){
-        HgSetFillColor(HG_WHITE);
-        HgBoxFill(30, 275, 960, 150, 1);
-        HgSetFont(HG_G, 100);
-        HgText(120, 300, "GAME  CLEAR!!");
+    HgSetFillColor(HG_WHITE);
+    HgBoxFill(30, 275, 960, 150, 1);
+    HgSetFont(HG_G, 100);
+    HgText(120, 300, "GAME  CLEAR!!");
 
-        return 0;
+    return 0;
 }
 
 int dfs_D(int arrayx, int arrayy, int MAP[][mapsizey_ex], int remain){

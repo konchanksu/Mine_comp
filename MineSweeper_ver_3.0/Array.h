@@ -180,10 +180,10 @@ int StOpen_A(int MAP[][mapsizey_ex]){
 
     for(i = 0; i < mapsizex_ex; i++) {
         for(j = 0; j < mapsizey_ex; j++) {
-                if(MAP[i][j] == 0) {
-                    BOMBZERO[num] = j * 100 + i;
-                    num++;
-                }
+            if(MAP[i][j] == 0) {
+                BOMBZERO[num] = j * 100 + i;
+                num++;
+            }
         }
     }
     if(num == 0) {
