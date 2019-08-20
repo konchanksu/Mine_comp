@@ -25,7 +25,7 @@ int ClickY_C(int y){
     int tmpY = 700 - Coordinatey_ex;
     int arrayy;
     if(y > Coordinatey_ex && y < tmpY){
-            arrayy =(y - Coordinatey_ex) / BOXSIZE;
+            arrayy = (y - Coordinatey_ex) / BOXSIZE;
             return arrayy;
     }
     return -1;
