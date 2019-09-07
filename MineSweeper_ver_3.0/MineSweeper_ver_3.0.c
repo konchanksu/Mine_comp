@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "Discription.h"
+#include "Description.h"
 #include "Array.h"
 #include "Click.h"
 
@@ -17,7 +17,7 @@ extern int bombnum_ex;    //爆弾の個数
 extern int Coordinatex_ex;//マスの左下の角のx座標
 extern int Coordinatey_ex;//マスの左下の角のy座標
 
-//_D --Discription.h  _A --Array.h  _C --Click.h
+//_D --Description.h  _A --Array.h  _C --Click.h
 //_ex --extern
 
 /*
