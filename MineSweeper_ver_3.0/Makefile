@@ -13,5 +13,3 @@ $(OBJECT): $(HEADER)
 test: $(TARGET)
 	./$(TARGET)
 
-clean:
-	@for each in `ls $(TARGET) $(CCTEMPS) 2> /dev/null` ; do echo "rm -f $${each}" ; rm -f $${each} ; done
