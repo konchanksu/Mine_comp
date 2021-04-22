@@ -4,5 +4,7 @@ MineSweeper
 
 HandyGraphicsを使用して、簡易のマインスイーパーゲームを作成しました。
 
-実行
+実行 
+```
 $ make test
+```
